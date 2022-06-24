@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { IColors } from '../types/colors';
 import { IPropsContext, ITBContext } from '../types/context';
 import { colorsDark, colorsWhite } from '../utils/template';
@@ -10,12 +16,9 @@ const TBContextProvider = ({ children }: IPropsContext) => {
   const [darkMode, setDarkMode] = useState(true);
   const [colors, setColors] = useState({} as IColors);
 
-  const setMode = useCallback(() => {
-    setDarkMode((v) => {
-      setColors(!v ? colorsDark : colorsWhite);
-      return !v;
-    });
-  }, []);
+  useEffect(() => setColors(darkMode ? colorsDark : colorsWhite), [darkMode]);
+
+  const setMode = useCallback(() => setDarkMode((v) => !v), []);
 
   const state: ITBContext = useMemo(
     () => ({ bearerToken, darkMode, setMode, colors }),
